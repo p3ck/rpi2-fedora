@@ -34,11 +34,11 @@ function get_fedora () {
   echo "Downloading Fedora, this may take a while"
   mkdir -p /root/temp/
   cd /root/temp
-  wget -c download.fedoraproject.org/pub/fedora/linux/releases/22/Images/armhfp/Fedora-${_variant}-armhfp-22-3-sda.raw.xz
+  wget -c download.fedoraproject.org/pub/fedora/linux/releases/23/Images/armhfp/Fedora-${_variant}-armhfp-23-10-sda.raw.xz
   git clone --depth=1 git://github.com/p3ck/rpi2-fedora
   git clone --depth=1 git://github.com/p3ck/firmware 
-  xz -kd Fedora-${_variant}-armhfp-22-3-sda.raw.xz
-  _offset=$(partx /root/temp/Fedora-${_variant}-armhfp-22-3-sda.raw | tail -n 1 | awk '{print $2}')
+  xz -kd Fedora-${_variant}-armhfp-23-10-sda.raw.xz
+  _offset=$(partx /root/temp/Fedora-${_variant}-armhfp-23-10-sda.raw | tail -n 1 | awk '{print $2}')
   _offset=$((_offset*512))
 }
 
@@ -73,11 +73,11 @@ function mount_dirs () {
   mount /dev/${_device}${_mmc}2 /mnt/sdcard
   mkdir -p /mnt/sdcard/boot
   mount /dev/${_device}${_mmc}1 /mnt/sdcard/boot
-  mount -o offset=${_offset} /root/temp/Fedora-${_variant}-armhfp-22-3-sda.raw /mnt/fedora
+  mount -o offset=${_offset} /root/temp/Fedora-${_variant}-armhfp-23-10-sda.raw /mnt/fedora
 }
 
 function setup_fedora () {
-  echo "Putting Fedora22 on your device"
+  echo "Putting Fedora23 on your device"
   cp -a /mnt/fedora/* /mnt/sdcard/
   echo "UUID=`lsblk -rno UUID /dev/${_device}${_mmc}2`  / ext4    defaults,noatime 0 0" > /mnt/sdcard/etc/fstab
   echo "UUID=`lsblk -rno UUID /dev/${_device}${_mmc}1`  /boot vfat    defaults,noatime 0 0" >> /mnt/sdcard/etc/fstab
@@ -104,7 +104,7 @@ function unmount_card () {
   echo "You're ready to pull out that card and boot into some Fedora glory"
   echo "Don't forget your keyboard!"
   echo "If you want to delete all temporary files,"
-  echo "run ./Rpi2-Fedora22 --cleanup"
+  echo "run ./Rpi2-Fedora23 --cleanup"
   echo ""
   echo "I suggest doing this AFTER you have Fedora working"
   echo "(Saves you time and bandwidth from downloading all over again)"
